@@ -1,0 +1,28 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.vh2zeya4eve-admin-wrap input[type=text] {
+    min-width: 400px;
+}
+.vh2zeya4eve-admin-wrap .test-api-key {
+    margin-left: 10px;
+}
+.vh2zeya4eve-admin-wrap .test-api-key-result {
+    margin-top: 5px;
+}
+
+body.vh2zeya4eve-loader {
+    position: relative;
+}
+body.vh2zeya4eve-loader:before {
+    content: '';
+    left: 0;
+    top: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.5);
+    z-index: 100003;
+}
