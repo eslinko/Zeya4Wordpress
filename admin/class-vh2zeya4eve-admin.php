@@ -180,4 +180,46 @@ class Vh2zeya4eve_Admin {
 
         wp_send_json(['status' => $api->checkApiKey($api_key)]);
     }
+
+    public function vh2zeya4eve_display_custom_order_meta($order) {
+        echo '<p class="form-field form-field-wide"><strong>'.__('Emitted Lovestars:', VH2ZEYA4EVE_TEXTDOMAIN).'</strong> ' . get_post_meta($order->get_id(), 'vh2zeya4eve_emittedLovestars', true) . '</p>';
+        echo '<p class="form-field form-field-wide"><strong>'.__('Invitation Code:', VH2ZEYA4EVE_TEXTDOMAIN).'</strong> ' . get_post_meta($order->get_id(), 'vh2zeya4eve_invitationCode', true) . '</p>';
+    }
+
+    public function vh2zeya4eve_order_completed($order_id, $order) {
+        if (!$order) {
+            return false;
+        }
+
+        $items = $order->get_items();
+        $product_ids = explode(',', get_option('vh2zeya4eve_product_ids'));
+        $total_sum = 0;
+
+        foreach ($items as $item) {
+            $product_id = $item->get_product_id();
+            if (in_array($product_id, $product_ids)) {
+                $total_sum += $item->get_total();
+            }
+        }
+
+        if($total_sum < 1) {
+            return false;
+        }
+
+        $api = new Vh2zeya4eve_API();
+        $response = $api->createRuleAction($total_sum);
+
+        if ($response->status === 'error') {
+            return $response->message;
+        }
+
+        if (!empty($response->ruleActionId) && !empty($response->emittedLovestars) && !empty($response->invitationCode)) {
+            // Сохраните полученные данные в мета-поля заказа
+            update_post_meta($order_id, 'vh2zeya4eve_ruleActionId', sanitize_text_field($response->ruleActionId));
+            update_post_meta($order_id, 'vh2zeya4eve_emittedLovestars', sanitize_text_field($response->emittedLovestars));
+            update_post_meta($order_id, 'vh2zeya4eve_invitationCode', sanitize_text_field($response->invitationCode));
+        } else {
+            return false;
+        }
+    }
 }

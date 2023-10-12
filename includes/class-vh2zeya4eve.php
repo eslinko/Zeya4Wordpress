@@ -168,6 +168,10 @@ class Vh2zeya4eve {
 
         // ajax actions
         $this->loader->add_action('wp_ajax_vh2zeya4eve_test_api_key', $plugin_admin, 'vh2zeya4eve_test_api_key');
+
+        // orders actions
+        $this->loader->add_action('woocommerce_admin_order_data_after_order_details', $plugin_admin, 'vh2zeya4eve_display_custom_order_meta', 10 , 1);
+        $this->loader->add_action('woocommerce_order_status_completed', $plugin_admin, 'vh2zeya4eve_order_completed', 10 , 2);
 	}
 
 	/**
