@@ -59,7 +59,8 @@ class Vh2zeya4eve_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles() : void
+    {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -82,7 +83,8 @@ class Vh2zeya4eve_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts() : void
+    {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -104,7 +106,8 @@ class Vh2zeya4eve_Admin {
 	}
 
     // create settings page
-    public function vh2zeya4eve_settings_page() {
+    public function vh2zeya4eve_settings_page() : void
+    {
         add_menu_page(
             'Vh2zeya4eve Settings',
             'Vh2zeya4eve Settings',
@@ -116,7 +119,8 @@ class Vh2zeya4eve_Admin {
         );
     }
 
-    public function vh2zeya4eve_settings_page_html() {
+    public function vh2zeya4eve_settings_page_html() : void
+    {
         // check user capabilities
         if (!current_user_can('manage_options')) {
             return;
@@ -126,7 +130,8 @@ class Vh2zeya4eve_Admin {
         require_once plugin_dir_path(__FILE__) . 'partials/vh2zeya4eve-admin-settings.php';
     }
 
-    public function vh2zeya4eve_register_settings() {
+    public function vh2zeya4eve_register_settings() : void
+    {
         register_setting('vh2zeya4eve_settings_group', 'vh2zeya4eve_api_key');
         register_setting('vh2zeya4eve_settings_group', 'vh2zeya4eve_product_ids');
 
@@ -154,20 +159,23 @@ class Vh2zeya4eve_Admin {
         );
     }
 
-    public function vh2zeya4eve_display_api_key_field() {
+    public function vh2zeya4eve_display_api_key_field() : void
+    {
         $api_key = get_option('vh2zeya4eve_api_key');
         echo "<input type='text' name='vh2zeya4eve_api_key' value='{$api_key}' required/>";
         echo "<button class='test-api-key button button-primary'>".__('Test Key', VH2ZEYA4EVE_TEXTDOMAIN)."</button>";
         echo '<div class="test-api-key-result"></div>';
     }
 
-    public function vh2zeya4eve_display_product_ids_field() {
+    public function vh2zeya4eve_display_product_ids_field() : void
+    {
         $product_ids = get_option('vh2zeya4eve_product_ids');
         echo "<input type='text' name='vh2zeya4eve_product_ids' value='{$product_ids}' />";
     }
 
     // test api key callback
-    public function vh2zeya4eve_test_api_key() {
+    public function vh2zeya4eve_test_api_key() : void
+    {
         $api_key = $_POST['api_key'];
 
         // check nonce
@@ -181,12 +189,14 @@ class Vh2zeya4eve_Admin {
         wp_send_json(['status' => $api->checkApiKey($api_key)]);
     }
 
-    public function vh2zeya4eve_display_custom_order_meta($order) {
+    public function vh2zeya4eve_display_custom_order_meta($order) : void
+    {
         echo '<p class="form-field form-field-wide"><strong>'.__('Emitted Lovestars:', VH2ZEYA4EVE_TEXTDOMAIN).'</strong> ' . get_post_meta($order->get_id(), 'vh2zeya4eve_emittedLovestars', true) . '</p>';
         echo '<p class="form-field form-field-wide"><strong>'.__('Invitation Code:', VH2ZEYA4EVE_TEXTDOMAIN).'</strong> ' . get_post_meta($order->get_id(), 'vh2zeya4eve_invitationCode', true) . '</p>';
     }
 
-    public function vh2zeya4eve_order_completed($order_id, $order) {
+    public function vh2zeya4eve_order_completed($order_id, $order) : bool
+    {
         if (!$order) {
             return false;
         }
@@ -218,6 +228,10 @@ class Vh2zeya4eve_Admin {
             update_post_meta($order_id, 'vh2zeya4eve_ruleActionId', sanitize_text_field($response->ruleActionId));
             update_post_meta($order_id, 'vh2zeya4eve_emittedLovestars', sanitize_text_field($response->emittedLovestars));
             update_post_meta($order_id, 'vh2zeya4eve_invitationCode', sanitize_text_field($response->invitationCode));
+
+            $billing_email = $order->get_billing_email();
+
+            return VH2Zeya4eve_Emails::sendMail($billing_email, 'Your Zeya Invitation Code', 'your code 1111');
         } else {
             return false;
         }

@@ -37,7 +37,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'VH2ZEYA4EVE_VERSION', '1.0.0' );
 define( 'VH2ZEYA4EVE_TEXTDOMAIN', 'vh2zeya4eve' );
-define( 'VH2ZEYA4EVE_ENVIRONMENT', 'DEV' ); // DEV, STAGING, PROD
+define( 'VH2ZEYA4EVE_ENVIRONMENT', 'STAGING' ); // DEV, STAGING, PROD
 
 /**
  * The code that runs during plugin activation.

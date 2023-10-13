@@ -100,6 +100,11 @@ class Vh2zeya4eve {
 	private function load_dependencies() {
 
         /**
+         * The class with emails methods.
+         */
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-vh2zeya4eve-emails.php';
+
+        /**
          * The class for api usage.
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-vh2zeya4eve-api.php';
