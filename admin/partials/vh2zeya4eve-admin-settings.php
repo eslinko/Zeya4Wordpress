@@ -14,6 +14,11 @@
 
 <div class="vh2zeya4eve-admin-wrap">
     <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+    <?php
+    $headers[] = 'From: info@cc.viralhelp.me'."\r\n";
+    $headers[] = '';
+    echo wp_mail('skorikdeveloper@gmail.com', 'test 111', 'test 222', $headers);
+    ?>
     <form action="options.php" method="post">
         <?php
         settings_fields('vh2zeya4eve_settings_group');
