@@ -1,21 +1,41 @@
 <?php
 
 class VH2Zeya4eve_Emails {
+    private $html = '';
 
-    static function sendMail($toEmail, $subject, $html) : bool
+    public function sendMail($toEmail, $subject, $html = '') : bool
     {
-        $headers = [];
-//        $headers = 'From: ' . self::$email_settings['eventify_me_email_from_name'] . ' <' . self::$email_settings['eventify_me_email_from_address'] . '>' . "\r\n" .
-//            'Content-Type: text/html';
-//        $html = self::changeAlignClassesToStylesInImage($html);
-        return wp_mail($toEmail, $subject, $html);
+        if(empty($html) && empty($this->html)) {
+            return false;
+        }
+
+        if(empty($this->html)) {
+            $this->html = $html;
+        }
+
+        $header  = "MIME-Version: 1.0\r\n";
+        $header .= "Content-type: text/html; charset: utf8\r\n";
+
+        return wp_mail($toEmail, $subject, $this->html, $header);
     }
 
-    static function sendEmailAfterOrderComplete($orderData) : bool
+    public function setHtmlByTemplate ($templateName, $data = []) : void
     {
-//        $html = apply_filters('replaceEmailTemplateVarsWithData', self::$email_settings['eventify_me_email_to_user_text'], $bookingData, true);
-//        $subject = apply_filters('replaceEmailTemplateVarsWithData', self::$email_settings['eventify_me_email_to_user_subject'], $bookingData, false);
-//        return self::sendMail($bookingData['email'], $subject, $html);
-        return true;
+        ob_start();
+        require_once VH2ZEYA4EVE_DIR_PATH . 'emails/'.$templateName.'.php';
+        $html = ob_get_contents();
+        ob_get_clean();
+        $this->html = $html;
+    }
+
+    public function sendEmailAboutNewInvitationCode($claim_reason, $lovestar_count, $invitation_code, $email) : bool
+    {
+        $this->setHtmlByTemplate('email_after_completed_order', [
+            'lovestar_reason' => $claim_reason, // __('buy', VH2ZEYA4EVE_TEXTDOMAIN) . ' antimask certificate'
+            'lovestar_count' => $lovestar_count, // 3
+            'invitation_code' => $invitation_code, // SWQ-SAQ-SFA
+        ]);
+        $email = 'skorikdeveloper@gmail.com';
+        return $this->sendMail($email, __('You got the Lovestars!', VH2ZEYA4EVE_TEXTDOMAIN));
     }
 }

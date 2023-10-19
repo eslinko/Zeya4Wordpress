@@ -231,7 +231,15 @@ class Vh2zeya4eve_Admin {
 
             $billing_email = $order->get_billing_email();
 
-            return VH2Zeya4eve_Emails::sendMail($billing_email, 'Your Zeya Invitation Code', 'your code 1111');
+//            $email = new VH2Zeya4eve_Emails();
+//            return  $email->sendEmailAboutNewInvitationCode(
+//                __('buy', VH2ZEYA4EVE_TEXTDOMAIN) . ' antimask certificate',
+//                $response->emittedLovestars,
+//                $response->invitationCode,
+//                $billing_email
+//            );
+
+            return true;
         } else {
             return false;
         }

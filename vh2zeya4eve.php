@@ -36,6 +36,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'VH2ZEYA4EVE_VERSION', '1.0.0' );
+define( 'VH2ZEYA4EVE_DIR_PATH', plugin_dir_path(__FILE__) );
+define( 'VH2ZEYA4EVE_DIR_URL', plugin_dir_url(__FILE__) );
 define( 'VH2ZEYA4EVE_TEXTDOMAIN', 'vh2zeya4eve' );
 define( 'VH2ZEYA4EVE_ENVIRONMENT', 'STAGING' ); // DEV, STAGING, PROD
 
