@@ -204,11 +204,13 @@ class Vh2zeya4eve_Admin {
         $items = $order->get_items();
         $product_ids = explode(',', get_option('vh2zeya4eve_product_ids'));
         $total_sum = 0;
+        $product_names = [];
 
         foreach ($items as $item) {
             $product_id = $item->get_product_id();
             if (in_array($product_id, $product_ids)) {
                 $total_sum += $item->get_total();
+                $product_names[] = $item->get_name();
             }
         }
 
@@ -231,15 +233,13 @@ class Vh2zeya4eve_Admin {
 
             $billing_email = $order->get_billing_email();
 
-//            $email = new VH2Zeya4eve_Emails();
-//            return  $email->sendEmailAboutNewInvitationCode(
-//                __('buy', VH2ZEYA4EVE_TEXTDOMAIN) . ' antimask certificate',
-//                $response->emittedLovestars,
-//                $response->invitationCode,
-//                $billing_email
-//            );
-
-            return true;
+            $email = new VH2Zeya4eve_Emails();
+            return $email->sendEmailAboutNewInvitationCode(
+                __('buy', VH2ZEYA4EVE_TEXTDOMAIN) . ' ' . implode(', ', $product_names),
+                $response->emittedLovestars,
+                $response->invitationCode,
+                $billing_email
+            );
         } else {
             return false;
         }

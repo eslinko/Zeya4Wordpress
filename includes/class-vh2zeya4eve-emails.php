@@ -35,7 +35,6 @@ class VH2Zeya4eve_Emails {
             'lovestar_count' => $lovestar_count, // 3
             'invitation_code' => $invitation_code, // SWQ-SAQ-SFA
         ]);
-        $email = 'skorikdeveloper@gmail.com';
         return $this->sendMail($email, __('You got the Lovestars!', VH2ZEYA4EVE_TEXTDOMAIN));
     }
 }
